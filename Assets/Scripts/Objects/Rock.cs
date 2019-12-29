@@ -37,18 +37,20 @@ public class Rock : MonoBehaviour
         {
             if (collision.collider.name == "Player" && !isHit)
             {
-                gameObject.GetComponent<Collider2D>().enabled = false;
+               // gameObject.GetComponent<Collider2D>().enabled = false;
                 isHit = true;
                 Player player = collision.collider.GetComponent<Player>();
                 player.Hurt();
-                Invoke("ReEnableCollider", 0.1f);
+              //  Invoke("ReEnableCollider", 0.1f);
             }
         }
 
     }
 
-    void ReEnableCollider()
+ /*  void ReEnableCollider()
     {
         gameObject.GetComponent<Collider2D>().enabled = true;
     }
+
+ */
 }

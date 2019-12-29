@@ -48,10 +48,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1582125883845626376, guid: 0aa1f22d509fce64cbbbc52ea583bfa6,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 95293c7528ac51846bf4ef47b4a5eeb1,
+        type: 3}
     - target: {fileID: 1582125883845626377, guid: 0aa1f22d509fce64cbbbc52ea583bfa6,
         type: 3}
       propertyPath: m_Name
       value: Rock1 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1582125883845626381, guid: 0aa1f22d509fce64cbbbc52ea583bfa6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1582125883845626382, guid: 0aa1f22d509fce64cbbbc52ea583bfa6,
+        type: 3}
+      propertyPath: m_Mass
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1582125883845626383, guid: 0aa1f22d509fce64cbbbc52ea583bfa6,
         type: 3}
@@ -107,22 +123,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1582125883845626376, guid: 0aa1f22d509fce64cbbbc52ea583bfa6,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 95293c7528ac51846bf4ef47b4a5eeb1,
-        type: 3}
-    - target: {fileID: 1582125883845626382, guid: 0aa1f22d509fce64cbbbc52ea583bfa6,
-        type: 3}
-      propertyPath: m_Mass
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1582125883845626381, guid: 0aa1f22d509fce64cbbbc52ea583bfa6,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1582125883845626381, guid: 0aa1f22d509fce64cbbbc52ea583bfa6, type: 3}
