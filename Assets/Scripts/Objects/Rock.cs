@@ -40,7 +40,7 @@ public class Rock : MonoBehaviour
                // gameObject.GetComponent<Collider2D>().enabled = false;
                 isHit = true;
                 Player player = collision.collider.GetComponent<Player>();
-                player.Hurt();
+                if (player.numOfBoosts < 1) player.Hurt(); // if player not Boosted then hit him
               //  Invoke("ReEnableCollider", 0.1f);
             }
         }

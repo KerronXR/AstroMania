@@ -25,7 +25,6 @@ public class PlayerController : MonoBehaviour
     private bool wasFlying = false;
     private bool isJumping = false;
     private bool isSliding = false;
-    public float jumpFactor = 1;
 
     [Header("Events")]
     [Space]
@@ -97,8 +96,8 @@ public class PlayerController : MonoBehaviour
             isJumping = true;
             MainPlayer.GetComponent<Player>().animator.SetBool("isJumping", true);
             m_Grounded = false;
-            m_Rigidbody2D.mass = 50;
-            m_Rigidbody2D.AddForce(new Vector2(0f, jumpFactor * (50 * m_JumpForce)));
+            m_Rigidbody2D.mass += 100;
+            m_Rigidbody2D.AddForce(new Vector2(0f, (m_Rigidbody2D.mass * m_JumpForce)));
             Invoke("DoneJumping", 0.1f);
         }
 
@@ -108,8 +107,8 @@ public class PlayerController : MonoBehaviour
             isSliding = true;
             MainPlayer.GetComponent<Player>().animator.SetBool("isSliding", true);
             m_Grounded = false;
-            m_Rigidbody2D.mass = 50;
-            m_Rigidbody2D.AddForce(new Vector2(30000f, 0));
+            m_Rigidbody2D.mass += 100;
+            m_Rigidbody2D.AddForce(new Vector2((m_Rigidbody2D.mass * 600), 0));
 
             // Disable one of the colliders when crouching and enable front collider
             if (m_SlideDisableCollider != null && m_SlideEnableCollider != null)
@@ -124,13 +123,13 @@ public class PlayerController : MonoBehaviour
     private void DoneJumping()
     {
         isJumping = false;
-        m_Rigidbody2D.mass = 1;
+        m_Rigidbody2D.mass -= 100;
     }
 
     private void DoneSliding()
     {
         isSliding = false;
-        m_Rigidbody2D.mass = 1;
+        m_Rigidbody2D.mass -= 100;
         m_Grounded = true;
 
         // Place colliders in default position when done sliding

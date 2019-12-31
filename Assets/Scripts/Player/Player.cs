@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     private GameObject rockPrefab;
     private bool isBusyCreatingPrefabRocks = false;
     private float horizontalMove = 0f;
-    private int healthPoints = 100;
+    // private int healthPoints = 100;
     private int coreAmount = 0;
     private int aquiredCoreAmount = 0;
     public float runSpeed = 40.0f;
@@ -27,10 +27,12 @@ public class Player : MonoBehaviour
     bool jump = false;
     bool slide = false;
     private Vector2 touchStartPos;
-    private float touchSlideLength;
     private Vector2 touchDirection;
-    private int numOfBoosts = 0;
+    public int numOfBoosts = 0;
     private int numOfHurts = 0;
+    private bool shouldJump = false;
+    private float previousXPosition;
+    private bool checkPosDone = true;
 
     private void Start()
     {
@@ -40,15 +42,11 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        // horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
-        horizontalMove = 1 * runSpeed;
-        animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
-
-        if (Input.GetButtonDown("Jump"))
+        if (checkPosDone)
         {
-            jump = true;
-            controller.jumpFactor = 6;
-
+            previousXPosition = rb.position.x;
+            checkPosDone = false;
+            Invoke("checkPos", 0.1f);
         }
 
         if (Input.touchCount > 0)
@@ -69,57 +67,56 @@ public class Player : MonoBehaviour
                     break;
 
                 case TouchPhase.Ended:
-                    touchSlideLength = touchDirection.y;
                     touchDirection = new Vector2(0, 0);
                     break;
             }
 
 
-            if (touchSlideLength > 50)
+            if (touchDirection.y > 50)
             {
-                controller.jumpFactor = touchSlideLength / 100;
                 jump = true;
-                touchSlideLength = 0;
             }
 
-            if (touchSlideLength < -100)
+            if (touchDirection.y < -100)
             {
                 slide = true;
-                touchSlideLength = 0;
             }
 
         }
-
-
-        /*if (Input.GetButtonDown("Fire1"))
-        {
-            //animator.SetBool("isAttacking", true);
-            if (controller.m_FacingRight == true)
-                attackPoint.transform.position = new Vector2(transform.position.x + (float)1.5, transform.position.y - (float)0.5);
-            else attackPoint.transform.position = new Vector2(transform.position.x - (float)1.5, transform.position.y - (float)0.5);
-
-        }
-        else if (Input.GetButtonUp("Fire1"))
-        {
-            //animator.SetBool("isAttacking", false);
-            attackPoint.transform.position = new Vector2(transform.position.x, transform.position.y - 7);
-
-        } */
 
         if (Input.GetButtonDown("Slide"))
         {
             slide = true;
         }
 
-        if (!isBusyCreatingPrefabRocks)
+        if (Input.GetButtonDown("Jump"))
+        {
+            jump = true;
+
+        }
+
+        if (shouldJump)
+        {
+            jump = true;
+        }
+
+        // horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+        horizontalMove = 1 * runSpeed;
+        controller.Move(horizontalMove * Time.fixedDeltaTime, slide, jump);
+        jump = false;
+        slide = false;
+
+        if (!isBusyCreatingPrefabRocks) // only execute within 0-2 seconds random 
         {
             isBusyCreatingPrefabRocks = true;
             Invoke("CreatePrefabRocks", (Random.value * 2));
         }
+    }
 
-        controller.Move(horizontalMove * Time.fixedDeltaTime, slide, jump);
-        jump = false;
-        slide = false;
+    public void checkPos() // Update the animator speed
+    {
+        animator.SetFloat("Speed", rb.position.x - previousXPosition);
+        checkPosDone = true;
     }
 
     public void CreatePrefabRocks()
@@ -142,15 +139,27 @@ public class Player : MonoBehaviour
         Instantiate(rockPrefab, whereToPutRock, new Quaternion(0, 0, 0, 0));
         isBusyCreatingPrefabRocks = false;
     }
-    public void onDoneSliding()
+    public void onDoneSliding() // On stop sliding event invoke this
     {
         animator.SetBool("isSliding", false);
     }
 
-    public void OnLanding()
+    public void OnLanding() // On landing event invoke this
     {
         animator.SetBool("isJumping", false);
     }
+
+    public void buttonUp()
+    {
+        shouldJump = true;
+        Invoke("buttonUpDone", 0.2f);
+    }
+
+    public void buttonUpDone()
+    {
+        shouldJump = false;
+    }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -163,7 +172,7 @@ public class Player : MonoBehaviour
     private void HurtStop()
     {
         numOfHurts--;
-        if (numOfHurts < 1)
+        if (numOfHurts < 1) // check if player wasn't hit again before stoping the slow effect
         {
             // animator.SetBool("isHurt", false);
             runSpeed = currentRunSpeed;
@@ -175,7 +184,7 @@ public class Player : MonoBehaviour
     public void Hurt()
     {
         numOfHurts++;
-        rb.AddForce(new Vector2(-40, -0.1f), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(-50, -0.1f), ForceMode2D.Impulse);
         runSpeed = currentRunSpeed / 2;
         animator.SetFloat("SlowDownMultiplier", currentAnimationSpeed / 2);
         Invoke("HurtStop", 1.5f);
@@ -191,9 +200,9 @@ public class Player : MonoBehaviour
             boostButton.GetComponent<BoostButton>().SetBoostImage(aquiredCoreAmount);
         }
         coreCounter.GetComponent<CoresCounter>().SetCoresAmount(coreAmount);
-        if (aquiredCoreAmount == 9) 
-        { 
-            boostButton.GetComponent<BoostButton>().animator.SetBool("isReady", true); 
+        if (aquiredCoreAmount == 9)
+        {
+            boostButton.GetComponent<BoostButton>().animator.SetBool("isReady", true);
         }
 
 
@@ -203,8 +212,9 @@ public class Player : MonoBehaviour
     {
         if (aquiredCoreAmount == 9)
         {
-            numOfBoosts++;
-            runSpeed = defaultRunSpeed * 1.5f;
+            rb.mass += 100;
+            numOfBoosts++; 
+            runSpeed = defaultRunSpeed * 1.5f; // if speed is slowed - this release it
             currentRunSpeed = runSpeed;
             animator.SetFloat("SlowDownMultiplier", 1.5f);
             boostButton.GetComponent<BoostButton>().animator.SetBool("isReady", false);
@@ -218,8 +228,9 @@ public class Player : MonoBehaviour
     public void BoostOff()
     {
         numOfBoosts--;
-        if (numOfBoosts < 1)
+        if (numOfBoosts < 1)  // check if no more boosts were added before stopping boost
         {
+            rb.mass -= 100;
             runSpeed = defaultRunSpeed;
             currentRunSpeed = runSpeed;
             animator.SetFloat("SlowDownMultiplier", defaultAnimationSpeed);
