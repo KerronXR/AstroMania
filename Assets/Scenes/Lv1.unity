@@ -788,7 +788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad4db2f64be87ee45aa401f61a6a777b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelSize: 27
+  levelSize: 36
   ground:
   - {fileID: 8065741592155295479, guid: ac23c95c53aaefd4882814d4694d9ca2, type: 3}
   - {fileID: 3114422542763004522, guid: d8172826b5171a44784556b8466884f1, type: 3}
@@ -1005,6 +1005,7 @@ GameObject:
   - component: {fileID: 495162566}
   - component: {fileID: 495162568}
   - component: {fileID: 495162569}
+  - component: {fileID: 495162570}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -1083,6 +1084,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f06ca7c721a5d4f8627d09d4fd011a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 495162570}
+  cam: {fileID: 519420031}
+  Player: {fileID: 1848386013}
 --- !u!114 &495162569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1098,6 +1102,25 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!95 &495162570
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495162564}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 48f032e31cac6164885f04b72aadac56, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1140,6 +1163,7 @@ MonoBehaviour:
   target: {fileID: 1848386016}
   smoothSpeed: 2.5
   offset: {x: 6, y: 1, z: -10}
+  isCameraShaking: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -3205,7 +3229,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1511095886}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 517.15, y: 0.93, z: 0}
+  m_LocalPosition: {x: 697.15, y: 0.93, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3820,8 +3844,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1825876683}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.39, y: -5.01, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.2, y: -4.1, z: 0}
+  m_LocalScale: {x: 1, y: 1.0378125, z: 1}
   m_Children: []
   m_Father: {fileID: 1848386016}
   m_RootOrder: 0
@@ -3866,10 +3890,10 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 3
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 82c5531414e92f24d88e2cec55d5c74f, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!212 &1848386015
 SpriteRenderer:
@@ -3993,15 +4017,17 @@ MonoBehaviour:
   controller: {fileID: 1848386020}
   animator: {fileID: 1848386021}
   rb: {fileID: 1848386014}
-  rockPrefab1: {fileID: 1582125883845626377, guid: 0aa1f22d509fce64cbbbc52ea583bfa6,
-    type: 3}
-  rockPrefab2: {fileID: 3112997260626581784, guid: cc177fd77bbae864f9f78464f61f8a11,
-    type: 3}
-  rockPrefab3: {fileID: 4496609745050160015, guid: 2677c1b3343c45a4daab36293a58342d,
-    type: 3}
+  rockPrefab:
+  - {fileID: 9222318217912393412, guid: 0aa1f22d509fce64cbbbc52ea583bfa6, type: 3}
+  - {fileID: 7108234900536214487, guid: cc177fd77bbae864f9f78464f61f8a11, type: 3}
+  - {fileID: 1046794960909614824, guid: 2677c1b3343c45a4daab36293a58342d, type: 3}
   coreCounter: {fileID: 2028458203}
   boostButton: {fileID: 651994252}
+  bottomCollider: {fileID: 1848386017}
+  slideCollider: {fileID: 1848386022}
   runSpeed: 40
+  numOfBoosts: 0
+  rockCreateMultiplier: 1.5
 --- !u!114 &1848386020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4014,9 +4040,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7486c3ae5bb93d54fa8fe6b2985ae98f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainPlayer: {fileID: 1848386013}
-  m_JumpForce: 600
-  m_SlideSpeed: 3
+  Player: {fileID: 1848386013}
+  m_JumpForce: 650
   m_MovementSmoothing: 0.056
   m_AirControl: 1
   m_WhatIsGround:
@@ -4028,7 +4053,8 @@ MonoBehaviour:
   m_SlideEnableCollider: {fileID: 1848386022}
   m_FacingRight: 1
   cam: {fileID: 519420030}
-  jumpFactor: 1
+  isSliding: 0
+  targetSpeedMultiplier: 10
   OnLandEvent:
     m_PersistentCalls:
       m_Calls:
@@ -4076,8 +4102,8 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!61 &1848386022
-BoxCollider2D:
+--- !u!58 &1848386022
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4089,19 +4115,9 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 2.7695458, y: -2.413818}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 19.2, y: 10.8}
-    newSize: {x: 3.16, y: 4.16}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: 2.8663049, y: -2.7663155}
   serializedVersion: 2
-  m_Size: {x: 2.56251, y: 2.6761346}
-  m_EdgeRadius: 0
+  m_Radius: 1.5950208
 --- !u!1 &1871921099
 GameObject:
   m_ObjectHideFlags: 0

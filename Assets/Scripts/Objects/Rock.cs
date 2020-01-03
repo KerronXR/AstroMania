@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class Rock : MonoBehaviour
 {
-    private float flySpeedX,flySpeedY;
+    private float flySpeedX, flySpeedY;
     public Rigidbody2D rb;
     private float rotateTo;
     private float creationTime;
-    private float previousYPosition;
     private bool isHit = false;
     void Start()
     {
@@ -18,6 +17,7 @@ public class Rock : MonoBehaviour
         flySpeedX = flySpeedX - 10;
         flySpeedY = Random.value * 10;
         transform.Rotate(0, 0, rotateTo);
+        rb.AddTorque(Random.value * 1500);
         rb.velocity = new Vector2(flySpeedX, flySpeedY);
     }
 
@@ -28,29 +28,35 @@ public class Rock : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        previousYPosition = rb.position.y;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (Mathf.Abs(Mathf.Abs(rb.position.y) - Mathf.Abs(previousYPosition)) > 0.1)
+
+        if (collision.collider.name == "Player" && !isHit)
         {
-            if (collision.collider.name == "Player" && !isHit)
-            {
-               // gameObject.GetComponent<Collider2D>().enabled = false;
-                isHit = true;
-                Player player = collision.collider.GetComponent<Player>();
-                if (player.numOfBoosts < 1) player.Hurt(); // if player not Boosted then hit him
-              //  Invoke("ReEnableCollider", 0.1f);
-            }
+            // gameObject.GetComponent<Collider2D>().enabled = false;
+            isHit = true;
+            Player player = collision.collider.GetComponent<Player>();
+            player.Hurt();
+        }
+        else
+        {
+            if ((!collision.collider.name.StartsWith("Rock")) || (Mathf.Abs(rb.velocity.y) < 1)) isHit = true;
         }
 
     }
 
- /*  void ReEnableCollider()
+    public void flyUp()
     {
-        gameObject.GetComponent<Collider2D>().enabled = true;
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        rb.AddForce(new Vector2(0, (rb.mass * (500 + (Random.value * 200)))));
+        rb.velocity = new Vector2(-(Random.value), 0);
+        Invoke("ReEnableCollider", 0.5f);
     }
 
- */
+    private void ReEnableCollider()
+    {
+        gameObject.GetComponent<Collider2D>().enabled = true; ;
+    }
 }

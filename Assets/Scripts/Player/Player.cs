@@ -8,12 +8,12 @@ public class Player : MonoBehaviour
     public PlayerController controller;
     public Animator animator;
     public Rigidbody2D rb;
-    public GameObject rockPrefab1;
-    public GameObject rockPrefab2;
-    public GameObject rockPrefab3;
+    public GameObject[] rockPrefab;
     public GameObject coreCounter;
     public GameObject boostButton;
-    private GameObject rockPrefab;
+    public Collider2D bottomCollider;
+    public Collider2D slideCollider;
+    private int pickRock;
     private bool isBusyCreatingPrefabRocks = false;
     private float horizontalMove = 0f;
     // private int healthPoints = 100;
@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     private float defaultAnimationSpeed = 1;
     bool jump = false;
     bool slide = false;
+    bool boost = false;
     private Vector2 touchStartPos;
     private Vector2 touchDirection;
     public int numOfBoosts = 0;
@@ -33,6 +34,8 @@ public class Player : MonoBehaviour
     private bool shouldJump = false;
     private float previousXPosition;
     private bool checkPosDone = true;
+    public float rockCreateMultiplier = 1.5f; // the lower the more rocks per second
+
 
     private void Start()
     {
@@ -42,6 +45,12 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+       
+        if(rb.velocity.y > 17f)
+        {
+            Debug.Log(rb.velocity.y);
+            rb.velocity = new Vector2(17f, rb.velocity.x);
+        }
         if (checkPosDone)
         {
             previousXPosition = rb.position.x;
@@ -102,6 +111,7 @@ public class Player : MonoBehaviour
 
         // horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
         horizontalMove = 1 * runSpeed;
+        //horizontalMove = 17;
         controller.Move(horizontalMove * Time.fixedDeltaTime, slide, jump);
         jump = false;
         slide = false;
@@ -109,7 +119,7 @@ public class Player : MonoBehaviour
         if (!isBusyCreatingPrefabRocks) // only execute within 0-2 seconds random 
         {
             isBusyCreatingPrefabRocks = true;
-            Invoke("CreatePrefabRocks", (Random.value * 2));
+            Invoke("CreatePrefabRocks", (Random.value * rockCreateMultiplier));
         }
     }
 
@@ -121,22 +131,9 @@ public class Player : MonoBehaviour
 
     public void CreatePrefabRocks()
     {
-        switch ((Mathf.Floor(Random.value * 3) + 1))
-        {
-            case 1:
-                rockPrefab = rockPrefab1;
-                break;
-            case 2:
-                rockPrefab = rockPrefab2;
-                break;
-            case 3:
-                rockPrefab = rockPrefab3;
-                break;
-            default:
-                break;
-        }
-        Vector2 whereToPutRock = new Vector2((transform.position.x + ((Random.value * 10))), (transform.position.y + 6 + (Random.value * 2)));
-        Instantiate(rockPrefab, whereToPutRock, new Quaternion(0, 0, 0, 0));
+        pickRock = (int)(Mathf.Floor(Random.value * rockPrefab.Length));
+        Vector2 whereToPutRock = new Vector2((transform.position.x + ((Random.value * 15))), (transform.position.y + 7 + (Random.value * 2)));
+        Instantiate(rockPrefab[pickRock], whereToPutRock, new Quaternion(0, 0, 0, 0));
         isBusyCreatingPrefabRocks = false;
     }
     public void onDoneSliding() // On stop sliding event invoke this
@@ -163,9 +160,28 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        /*
+        if (slideCollider.enabled == true && !collision.collider.name.StartsWith("Rock"))
+        {
+            foreach (ContactPoint2D cp in collision.contacts)
+            {
+                if(Mathf.Abs(cp.normal.y) < 0.25f)
+                {
+                    Debug.Log(cp.normal.y);
+                    rb.position += new Vector2(0.2f, 0.5f);
+                }
+            }
+           // if (collision.collider.bounds.max.y - slideCollider.bounds.min.y > 0);
+        }
+        */
         if (collision.collider.name == "Spaceship")
         {
             SceneManager.LoadScene("Win");
+        }
+        if (collision.collider.name.StartsWith("Rock") && (controller.isSliding || boost))
+        {
+            Rock rock = collision.collider.GetComponent<Rock>();
+            rock.flyUp();
         }
     }
 
@@ -175,21 +191,23 @@ public class Player : MonoBehaviour
         if (numOfHurts < 1) // check if player wasn't hit again before stoping the slow effect
         {
             // animator.SetBool("isHurt", false);
-            runSpeed = currentRunSpeed;
-            animator.SetFloat("SlowDownMultiplier", currentAnimationSpeed);
+            //runSpeed = currentRunSpeed;
+           // animator.SetFloat("SlowDownMultiplier", currentAnimationSpeed);
         }
     }
 
 
     public void Hurt()
     {
-        numOfHurts++;
-        rb.AddForce(new Vector2(-50, -0.1f), ForceMode2D.Impulse);
-        runSpeed = currentRunSpeed / 2;
-        animator.SetFloat("SlowDownMultiplier", currentAnimationSpeed / 2);
-        Invoke("HurtStop", 1.5f);
+        if (numOfBoosts < 1 && controller.isSliding == false)
+        { // if player not Boosted or sliding then hit him
+           // numOfHurts++;
+            rb.AddForce(new Vector2(-30 * rb.mass, - 10), ForceMode2D.Impulse);
+           // runSpeed = currentRunSpeed / 2;
+           // animator.SetFloat("SlowDownMultiplier", currentAnimationSpeed / 2);
+           // Invoke("HurtStop", 1.5f);
+        }
     }
-
 
     public void AddCore()
     {
@@ -212,8 +230,9 @@ public class Player : MonoBehaviour
     {
         if (aquiredCoreAmount == 9)
         {
-            rb.mass += 100;
-            numOfBoosts++; 
+            rb.mass += 50;
+            boost = true;
+            numOfBoosts++;
             runSpeed = defaultRunSpeed * 1.5f; // if speed is slowed - this release it
             currentRunSpeed = runSpeed;
             animator.SetFloat("SlowDownMultiplier", 1.5f);
@@ -230,7 +249,8 @@ public class Player : MonoBehaviour
         numOfBoosts--;
         if (numOfBoosts < 1)  // check if no more boosts were added before stopping boost
         {
-            rb.mass -= 100;
+            boost = false;
+            rb.mass -= 50;
             runSpeed = defaultRunSpeed;
             currentRunSpeed = runSpeed;
             animator.SetFloat("SlowDownMultiplier", defaultAnimationSpeed);

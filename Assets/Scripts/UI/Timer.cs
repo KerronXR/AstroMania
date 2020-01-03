@@ -7,6 +7,9 @@ using System;
 
 public class Timer : MonoBehaviour
 {
+    public Animator animator;
+    public Camera cam;
+    public GameObject Player;
     public static float timeToFinish = 90;
     private int timeLeft;
     Text timer;
@@ -23,10 +26,17 @@ public class Timer : MonoBehaviour
         {
             SceneManager.LoadScene("GameOver");
         }
-        else
+        if (timeLeft <= 20)
         {
-            timer.text = String.Format("{0:00}:{1:00}", timeLeft/60, timeLeft%60);
+            Player.GetComponent<Player>().rockCreateMultiplier = 1.0f;
         }
+        if (timeLeft <= 10)
+        {
+            animator.SetBool("isTimeRunningOut", true);
+            Player.GetComponent<Player>().rockCreateMultiplier = 0.7f;
+            cam.GetComponent<CameraFollow>().isCameraShaking = true;
+        }
+        timer.text = String.Format("{0:00}:{1:00}", timeLeft / 60, timeLeft % 60);
     }
 }
 
