@@ -5,7 +5,9 @@ using UnityEngine;
 public class Crack : MonoBehaviour
 {
     public Animator animator;
+    public GameObject Timer;
     public Collider2D holeCollider;
+    private bool isHit = false;
 
     public void MakeCrack()
     {
@@ -25,7 +27,17 @@ public class Crack : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        Player player = collider.GetComponent<Player>();
-        player.HasFallenDown();
+        if (collider.name == "Player" && !isHit)
+        {          
+            isHit = true;
+            Player player = collider.GetComponent<Player>();
+            player.HasFallenDown();
+            Invoke("CanReEnter", 0.8f);
+        }
+    }
+
+    void CanReEnter()
+    {
+        isHit = false;
     }
 }

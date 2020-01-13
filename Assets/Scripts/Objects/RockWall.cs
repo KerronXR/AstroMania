@@ -19,10 +19,12 @@ public class RockWall : MonoBehaviour
     {
         Vector2 whereToPutExplosion = new Vector2(transform.position.x, transform.position.y);
         GameObject ExplosionQ = Instantiate(Explosion, whereToPutExplosion, new Quaternion(0, 0, 0, 0));
+        ExplosionQ.transform.localScale = new Vector2(rockScale, rockScale);
         ExplosionQ.GetComponent<Animator>().SetBool("isClicked", true);
         for (int i = 0; i < pieces.Length; i++)
         {
             Vector2 whereToPut = new Vector2(transform.position.x + Random.value, transform.position.y + Random.value);
+            pieces[i].GetComponent<RockPiece>().rockScale = rockScale;
             Instantiate(pieces[i], whereToPut, new Quaternion(0, 0, 0, 0));
         }
         StartCoroutine(RemoveExplosion(ExplosionQ, 0.5f));

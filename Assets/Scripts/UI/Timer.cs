@@ -10,7 +10,7 @@ public class Timer : MonoBehaviour
     public Animator animator;
     public Camera cam;
     public GameObject Player;
-    public static float timeToFinish = 90;
+    public float timeToFinish = 90;
     private int timeLeft;
     Text timer;
 

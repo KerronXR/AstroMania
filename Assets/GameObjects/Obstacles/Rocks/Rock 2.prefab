@@ -117,6 +117,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 5480013386907518699}
+  image: {fileID: 6879875647026136970}
+  Explosion: {fileID: 1396851649541213089, guid: 8bad635f0abc7134fbd5f227255a53d9,
+    type: 3}
+  pieces:
+  - {fileID: 2641082956594670425, guid: eabe1064a274f504eb8657317797cf66, type: 3}
+  - {fileID: 7173088451340157341, guid: 449858a3769dd8649800353eaa904658, type: 3}
+  - {fileID: 4227919104452153133, guid: 9438d8a63527fb14eaecf813c243d104, type: 3}
+  - {fileID: 8010110490573990212, guid: f4a790c00cc0a0f4ea709e6ad0d8b380, type: 3}
+  - {fileID: 8813825802275898473, guid: 2ac22f28fbaee734293bcfa9a2daf783, type: 3}
 --- !u!60 &-4359097466319363690
 PolygonCollider2D:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public GameObject[] rockPrefab;
     public GameObject coreCounter;
     public GameObject boostButton;
+    public GameObject timer;
     public Collider2D bottomCollider;
     public Collider2D slideCollider;
     private int pickRock;
@@ -183,6 +184,11 @@ public class Player : MonoBehaviour
             Rock rock = collision.collider.GetComponent<Rock>();
             rock.flyUp();
         }
+        if (collision.collider.name.Contains("small") && (controller.isSliding || boost))
+        {
+            RockPiece rockPiece = collision.collider.GetComponent<RockPiece>();
+            rockPiece.flyUp();
+        }
         if (collision.collider.name.StartsWith("Crack"))
         {
             if (Random.value > 0.7)
@@ -270,7 +276,20 @@ public class Player : MonoBehaviour
 
     public void HasFallenDown()
     {
-        Debug.Log("DOWN IN THE HOLE");
+        Invoke("BackPlayerUp", 0.2f);
+    }
+
+    private void BackPlayerUp()
+    {
+        timer.GetComponent<Timer>().timeToFinish -= 5;
+        timer.GetComponent<Timer>().animator.SetBool("isTimeRunningOut", true);
+        transform.position = new Vector2(transform.position.x + 2f, transform.position.y + 10);
+        Invoke("BackPlayerUp2", 1f);
+    }
+
+    private void BackPlayerUp2()
+    {
+        timer.GetComponent<Timer>().animator.SetBool("isTimeRunningOut", false);
     }
 
 }

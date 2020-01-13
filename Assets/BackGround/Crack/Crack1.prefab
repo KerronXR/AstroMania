@@ -196,6 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 7738996793386075977}
+  Timer: {fileID: 6559363538459818515, guid: 9de7fdf0289c70648a30fc0ddaa96f3d, type: 3}
   holeCollider: {fileID: 4164847300606230056}
 --- !u!61 &1730529265615423269
 BoxCollider2D:
