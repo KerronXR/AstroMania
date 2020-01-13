@@ -13,9 +13,9 @@ public class CreateCores : MonoBehaviour
     {
         for (int i = 1; i <= coreAmount; i++)
         {
-            randomRollX = ((int)Mathf.Floor(Random.value * 15)) + 5;
+            randomRollX = ((int)Mathf.Floor(Random.value * 20)) + 5;
             randomRollY = (int)Mathf.Floor(Random.value * 4);
-            Vector2 whereToPutCore = new Vector2(i * randomRollX, -2 + randomRollY);
+            Vector2 whereToPutCore = new Vector2(15 * i + randomRollX, -2 + randomRollY);
             Instantiate(core, whereToPutCore, new Quaternion(0, 0, 0, 0));
         }
     }

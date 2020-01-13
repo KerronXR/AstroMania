@@ -9,8 +9,12 @@ public class Rock : MonoBehaviour
     private float rotateTo;
     private float creationTime;
     private bool isHit = false;
+    private float rockScale;
     void Start()
     {
+        rockScale = 1 - Random.value / 2;
+        transform.localScale = new Vector2(rockScale, rockScale);
+        rb.mass *= rockScale;
         creationTime = Time.timeSinceLevelLoad;
         rotateTo = (float)(Random.value * 360);
         flySpeedX = Random.value * 20;
@@ -20,7 +24,6 @@ public class Rock : MonoBehaviour
         rb.AddTorque(Random.value * 1500);
         rb.velocity = new Vector2(flySpeedX, flySpeedY);
     }
-
 
     void Update()
     {
@@ -57,6 +60,6 @@ public class Rock : MonoBehaviour
 
     private void ReEnableCollider()
     {
-        gameObject.GetComponent<Collider2D>().enabled = true; ;
+        gameObject.GetComponent<Collider2D>().enabled = true;
     }
 }

@@ -12,14 +12,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings
     [SerializeField] private Collider2D m_SlideDisableCollider;                // A collider that will be disabled when sliding
     [SerializeField] private Collider2D m_SlideEnableCollider;                // A frontbody collider that will be enabled when sliding
+    public CameraFollow cam;
 
-    const float k_GroundedRadius = .5f; // Radius of the overlap circle to determine if grounded
+    const float k_GroundedRadius = .8f; // Radius of the overlap circle to determine if grounded
     private bool m_Grounded = true;            // Whether or not the player is grounded.
     // const float k_CeilingRadius = .2f; // Radius of the overlap circle to determine if the player can stand up
     private Rigidbody2D m_Rigidbody2D;
     public bool m_FacingRight = true;  // For determining which way the player is currently facing.
     private Vector3 m_Velocity = Vector3.zero;
-    public CameraFollow cam;
     private Collider2D[] colliders;
     private bool isJumping = false;
     public bool isSliding = false;
