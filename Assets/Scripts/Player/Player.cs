@@ -189,15 +189,6 @@ public class Player : MonoBehaviour
             RockPiece rockPiece = collision.collider.GetComponent<RockPiece>();
             rockPiece.flyUp();
         }
-        if (collision.collider.name.StartsWith("Crack"))
-        {
-            if (Random.value > 0.7)
-            {
-                Crack crack = collision.collider.GetComponent<Crack>();
-                crack.MakeCrack();
-            }
-
-        }
     }
 
     private void HurtStop()
@@ -272,24 +263,6 @@ public class Player : MonoBehaviour
             currentAnimationSpeed = defaultAnimationSpeed;
         }
 
-    }
-
-    public void HasFallenDown()
-    {
-        Invoke("BackPlayerUp", 0.2f);
-    }
-
-    private void BackPlayerUp()
-    {
-        timer.GetComponent<Timer>().timeToFinish -= 5;
-        timer.GetComponent<Timer>().animator.SetBool("isTimeRunningOut", true);
-        transform.position = new Vector2(transform.position.x + 2f, transform.position.y + 10);
-        Invoke("BackPlayerUp2", 1f);
-    }
-
-    private void BackPlayerUp2()
-    {
-        timer.GetComponent<Timer>().animator.SetBool("isTimeRunningOut", false);
     }
 
 }

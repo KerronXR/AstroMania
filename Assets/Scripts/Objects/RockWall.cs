@@ -9,9 +9,11 @@ public class RockWall : MonoBehaviour
     public GameObject Explosion;
     public GameObject[] pieces;
     private float rockScale;
+    public static bool queriesHitTriggers;
 
     private void Start()
     {
+        queriesHitTriggers = false;
         rockScale = 1.2f - Random.value;
         transform.localScale = new Vector2(rockScale, rockScale);
     }

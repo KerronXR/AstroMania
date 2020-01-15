@@ -30,7 +30,7 @@ public class Rock : MonoBehaviour
 
     void Update()
     {
-        if ((Time.timeSinceLevelLoad - creationTime) > 20)
+        if ((Time.timeSinceLevelLoad - creationTime) > 15)
         {
             Destroy(gameObject);
         }

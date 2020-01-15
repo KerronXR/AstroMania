@@ -5,12 +5,13 @@ using UnityEngine;
 public class Crack : MonoBehaviour
 {
     public Animator animator;
-    public GameObject Timer;
     public Collider2D holeCollider;
-    private bool isHit = false;
+    public Collider2D triggerCollider;
+    private bool isCracked = false;
 
     public void MakeCrack()
     {
+        isCracked = true;
         Invoke("Crack1Stage", 0.5f);
     }
 
@@ -27,17 +28,13 @@ public class Crack : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.name == "Player" && !isHit)
-        {          
-            isHit = true;
-            Player player = collider.GetComponent<Player>();
-            player.HasFallenDown();
-            Invoke("CanReEnter", 0.8f);
+        if (collider.name == "CrackCheck" && !isCracked)
+        {
+            if (Random.value > 0.7)
+            {
+                triggerCollider.enabled = false;
+                Invoke("MakeCrack", 0.2f);
+            }
         }
-    }
-
-    void CanReEnter()
-    {
-        isHit = false;
     }
 }
