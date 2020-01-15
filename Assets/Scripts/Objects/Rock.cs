@@ -9,8 +9,15 @@ public class Rock : MonoBehaviour
     private float rotateTo;
     private float creationTime;
     private bool isHit = false;
+    private float rockScale;
+    public SpriteRenderer image;
+    public GameObject Explosion;
+    public GameObject[] pieces;
     void Start()
     {
+        rockScale = 1 - Random.value / 2;
+        transform.localScale = new Vector2(rockScale, rockScale);
+        rb.mass *= rockScale;
         creationTime = Time.timeSinceLevelLoad;
         rotateTo = (float)(Random.value * 360);
         flySpeedX = Random.value * 20;
@@ -21,13 +28,35 @@ public class Rock : MonoBehaviour
         rb.velocity = new Vector2(flySpeedX, flySpeedY);
     }
 
-
     void Update()
     {
-        if ((Time.timeSinceLevelLoad - creationTime) > 5)
+        if ((Time.timeSinceLevelLoad - creationTime) > 15)
         {
             Destroy(gameObject);
         }
+    }
+    private void OnMouseDown()
+    {
+        Vector2 whereToPutExplosion = new Vector2(transform.position.x, transform.position.y);
+        GameObject ExplosionQ = Instantiate(Explosion, whereToPutExplosion, new Quaternion(0, 0, 0, 0));
+        ExplosionQ.transform.localScale = new Vector2(rockScale, rockScale);
+        ExplosionQ.GetComponent<Animator>().SetBool("isClicked", true);
+        for (int i = 0; i < pieces.Length; i++)
+        {
+            Vector2 whereToPut = new Vector2(transform.position.x + Random.value, transform.position.y + Random.value);
+            pieces[i].GetComponent<RockPiece>().rockScale = rockScale / 2;
+            Instantiate(pieces[i], whereToPut, new Quaternion(0, 0, 0, 0));
+        }
+        StartCoroutine(RemoveExplosion(ExplosionQ, 0.5f));
+        image.sprite = null;
+        gameObject.GetComponent<Collider2D>().enabled = false;
+
+    }
+    IEnumerator RemoveExplosion(GameObject ExplosionQ, float delayTime)
+    {
+        yield return new WaitForSeconds(delayTime);
+        Destroy(ExplosionQ);
+        Destroy(gameObject);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -57,6 +86,6 @@ public class Rock : MonoBehaviour
 
     private void ReEnableCollider()
     {
-        gameObject.GetComponent<Collider2D>().enabled = true; ;
+        gameObject.GetComponent<Collider2D>().enabled = true;
     }
 }

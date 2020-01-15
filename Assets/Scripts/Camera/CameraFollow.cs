@@ -17,7 +17,7 @@ public class CameraFollow : MonoBehaviour
         }
         else
         {
-            desiredPosition.y = Mathf.Lerp(transform.position.y, desiredPosition.y, 10f * Time.deltaTime);
+            desiredPosition.y = Mathf.Lerp(transform.position.y, desiredPosition.y, 100f * Time.deltaTime);
         }
         Vector3 smoothPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
         transform.position = smoothPosition;

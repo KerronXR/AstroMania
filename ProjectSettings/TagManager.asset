@@ -41,6 +41,27 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: BackGround
+  - name: Parallax
+    uniqueID: 1679881567
+    locked: 0
+  - name: UnderGround
+    uniqueID: 3460363377
+    locked: 0
+  - name: Ground
+    uniqueID: 32122121
+    locked: 0
+  - name: Stones
+    uniqueID: 966146355
+    locked: 0
+  - name: Player
     uniqueID: 527029405
+    locked: 0
+  - name: Lava
+    uniqueID: 4044616557
+    locked: 0
+  - name: Cores
+    uniqueID: 3732369527
+    locked: 0
+  - name: Objects
+    uniqueID: 531540627
     locked: 0

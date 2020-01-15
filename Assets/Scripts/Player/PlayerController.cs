@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private GameObject Player;
+    [SerializeField] private GameObject PlayerLight;
     [SerializeField] private float m_JumpForce = 100f;                          // Amount of force added when the player jumps.
     [Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;  // How much to smooth out the movement
     [SerializeField] private bool m_AirControl = false;                         // Whether or not a player can steer while jumping;
@@ -12,14 +13,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings
     [SerializeField] private Collider2D m_SlideDisableCollider;                // A collider that will be disabled when sliding
     [SerializeField] private Collider2D m_SlideEnableCollider;                // A frontbody collider that will be enabled when sliding
+    public CameraFollow cam;
 
-    const float k_GroundedRadius = .5f; // Radius of the overlap circle to determine if grounded
+    const float k_GroundedRadius = .8f; // Radius of the overlap circle to determine if grounded
     private bool m_Grounded = true;            // Whether or not the player is grounded.
     // const float k_CeilingRadius = .2f; // Radius of the overlap circle to determine if the player can stand up
     private Rigidbody2D m_Rigidbody2D;
     public bool m_FacingRight = true;  // For determining which way the player is currently facing.
     private Vector3 m_Velocity = Vector3.zero;
-    public CameraFollow cam;
     private Collider2D[] colliders;
     private bool isJumping = false;
     public bool isSliding = false;
@@ -51,6 +52,7 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = false;
             canDoAction = true;
+            PlayerLight.GetComponent<PlayerLight>().isJumping = false;
             OnLandEvent.Invoke();
         }
     }
@@ -100,6 +102,7 @@ public class PlayerController : MonoBehaviour
             shouldCheckGround = false;  // give time to fly off the ground
             canDoAction = false;
             isJumping = true;
+            PlayerLight.GetComponent<PlayerLight>().isJumping = true;
             Player.GetComponent<Player>().animator.SetBool("isJumping", true);
             m_Rigidbody2D.mass += 50;
             m_Rigidbody2D.AddForce(new Vector2(0f, (m_Rigidbody2D.mass * m_JumpForce)));
@@ -111,6 +114,7 @@ public class PlayerController : MonoBehaviour
         {
             canDoAction = false;
             isSliding = true;
+            PlayerLight.GetComponent<PlayerLight>().isSliding = true;
             Player.GetComponent<Player>().animator.SetBool("isSliding", true);
             m_Rigidbody2D.mass += 10;
             //m_Rigidbody2D.AddForce(new Vector2((600), 1));
@@ -145,7 +149,7 @@ public class PlayerController : MonoBehaviour
             m_SlideDisableCollider.enabled = true;
             m_SlideEnableCollider.enabled = false;
         }
-
+        PlayerLight.GetComponent<PlayerLight>().isSliding = false;
         OnSlideEvent.Invoke();
     }
 

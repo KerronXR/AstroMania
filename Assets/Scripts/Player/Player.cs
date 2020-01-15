@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public GameObject[] rockPrefab;
     public GameObject coreCounter;
     public GameObject boostButton;
+    public GameObject timer;
     public Collider2D bottomCollider;
     public Collider2D slideCollider;
     private int pickRock;
@@ -45,8 +46,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-       
-        if(rb.velocity.y > 17f)
+
+        if (rb.velocity.y > 17f)
         {
             Debug.Log(rb.velocity.y);
             rb.velocity = new Vector2(17f, rb.velocity.x);
@@ -183,6 +184,11 @@ public class Player : MonoBehaviour
             Rock rock = collision.collider.GetComponent<Rock>();
             rock.flyUp();
         }
+        if (collision.collider.name.Contains("small") && (controller.isSliding || boost))
+        {
+            RockPiece rockPiece = collision.collider.GetComponent<RockPiece>();
+            rockPiece.flyUp();
+        }
     }
 
     private void HurtStop()
@@ -192,7 +198,7 @@ public class Player : MonoBehaviour
         {
             // animator.SetBool("isHurt", false);
             //runSpeed = currentRunSpeed;
-           // animator.SetFloat("SlowDownMultiplier", currentAnimationSpeed);
+            // animator.SetFloat("SlowDownMultiplier", currentAnimationSpeed);
         }
     }
 
@@ -201,11 +207,11 @@ public class Player : MonoBehaviour
     {
         if (numOfBoosts < 1 && controller.isSliding == false)
         { // if player not Boosted or sliding then hit him
-           // numOfHurts++;
-            rb.AddForce(new Vector2(-30 * rb.mass, - 10), ForceMode2D.Impulse);
-           // runSpeed = currentRunSpeed / 2;
-           // animator.SetFloat("SlowDownMultiplier", currentAnimationSpeed / 2);
-           // Invoke("HurtStop", 1.5f);
+          // numOfHurts++;
+            rb.AddForce(new Vector2(-30 * rb.mass, -10), ForceMode2D.Impulse);
+            // runSpeed = currentRunSpeed / 2;
+            // animator.SetFloat("SlowDownMultiplier", currentAnimationSpeed / 2);
+            // Invoke("HurtStop", 1.5f);
         }
     }
 
@@ -233,14 +239,14 @@ public class Player : MonoBehaviour
             rb.mass += 50;
             boost = true;
             numOfBoosts++;
-            runSpeed = defaultRunSpeed * 1.5f; // if speed is slowed - this release it
+            runSpeed = defaultRunSpeed * 1.4f; // if speed is slowed - this release it
             currentRunSpeed = runSpeed;
-            animator.SetFloat("SlowDownMultiplier", 1.5f);
+            animator.SetFloat("SlowDownMultiplier", 1.4f);
             boostButton.GetComponent<BoostButton>().animator.SetBool("isReady", false);
-            currentAnimationSpeed = 1.5f;
+            currentAnimationSpeed = 1.4f;
             aquiredCoreAmount = 0;
             boostButton.GetComponent<BoostButton>().SetBoostImage(0);
-            Invoke("BoostOff", 5f);
+            Invoke("BoostOff", 6f);
         }
     }
 
