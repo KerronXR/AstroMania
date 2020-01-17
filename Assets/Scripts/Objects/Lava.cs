@@ -33,4 +33,23 @@ public class Lava : MonoBehaviour
         }
 
     }
+
+    private void OnTriggerStay2D(Collider2D collider)
+    {
+        if (collider.name == "Player")
+        {
+            Player player = collider.GetComponent<Player>();
+            player.StandsOnLava();
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.name == "Player")
+        {
+            Player player = collider.GetComponent<Player>();
+            player.StopStandingOnLava();
+        }
+    }
+
 }

@@ -10,7 +10,7 @@ public class CreateRockWalls : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i <= levelSize; i++)
+        for (int i = 1; i <= levelSize; i++)
         {
             randomRoll = (int)Mathf.Floor(Random.value * RockTypes.Length); // choose the type
             Vector2 whereToPut = new Vector2(i * 30 + (Random.value * 20), 0);
