@@ -14,7 +14,7 @@ public class RockWall : MonoBehaviour
     private void Start()
     {
         queriesHitTriggers = false;
-        rockScale = 1.2f - Random.value;
+        rockScale = 0.7f + Random.value * 0.7f;
         transform.localScale = new Vector2(rockScale, rockScale);
     }
     private void OnMouseDown()

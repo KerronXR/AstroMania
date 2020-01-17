@@ -65,3 +65,6 @@ TagManager:
   - name: Objects
     uniqueID: 531540627
     locked: 0
+  - name: GameOver
+    uniqueID: 1526483939
+    locked: 0

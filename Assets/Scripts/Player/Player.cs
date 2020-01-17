@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public GameObject coreCounter;
     public GameObject boostButton;
     public GameObject timer;
+    public GameObject thermometer;
     public Collider2D bottomCollider;
     public Collider2D slideCollider;
     private int pickRock;
@@ -36,6 +37,8 @@ public class Player : MonoBehaviour
     private float previousXPosition;
     private bool checkPosDone = true;
     public float rockCreateMultiplier = 1.5f; // the lower the more rocks per second
+    private int lavaLevel = 0;
+    private bool isStandingOnLava = false;
 
 
     private void Start()
@@ -122,6 +125,8 @@ public class Player : MonoBehaviour
             isBusyCreatingPrefabRocks = true;
             Invoke("CreatePrefabRocks", (Random.value * rockCreateMultiplier));
         }
+
+        checkTemperature();
     }
 
     public void checkPos() // Update the animator speed
@@ -263,6 +268,32 @@ public class Player : MonoBehaviour
             currentAnimationSpeed = defaultAnimationSpeed;
         }
 
+    }
+
+    public void StandsOnLava()
+    {
+        if (lavaLevel < 520) lavaLevel++;
+        isStandingOnLava = true;
+    }
+
+    public void StopStandingOnLava()
+    {
+        isStandingOnLava = false;
+    }
+
+    private void checkTemperature()
+    {
+        if (isStandingOnLava)
+        {
+            if (lavaLevel >= 520) SceneManager.LoadScene("GameOver1");
+            thermometer.GetComponent<Thermometer>().SetThermo(lavaLevel / 10);
+        }
+        else
+        {
+            if (lavaLevel > 0) lavaLevel--;
+            if (lavaLevel == 0) thermometer.GetComponent<Thermometer>().SetThermo(52);
+            else thermometer.GetComponent<Thermometer>().SetThermo(lavaLevel / 10);
+        }
     }
 
 }
