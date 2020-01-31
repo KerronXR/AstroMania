@@ -17,6 +17,7 @@ public class Crack : MonoBehaviour
 
     private void Crack1Stage()
     {
+        AudioManager.instance.Play("Stonefall" + Random.Range(1, 4));
         animator.SetBool("isCracking", true);
         Invoke("Crack2Stage", 0.4f);
     }

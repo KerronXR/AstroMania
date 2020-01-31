@@ -34,6 +34,14 @@ public class Lava : MonoBehaviour
 
     }
 
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.name == "Player")
+        {
+            AudioManager.instance.Play("LavaDrop");
+        }
+    }
+
     private void OnTriggerStay2D(Collider2D collider)
     {
         if (collider.name == "Player")

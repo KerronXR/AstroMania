@@ -7,6 +7,8 @@ using System;
 
 public class Timer : MonoBehaviour
 {
+    public delegate void TimeIsUpAction();
+    public static event TimeIsUpAction TimeIsUp;
     public Animator animator;
     public Camera cam;
     public GameObject Player;
@@ -22,16 +24,17 @@ public class Timer : MonoBehaviour
     void Update()
     {
         timeLeft = ((int)(timeToFinish - Time.timeSinceLevelLoad));
-        if (timeLeft <= 0)
+        if (timeLeft == 0)
         {
-            SceneManager.LoadScene("GameOver1");
+            if (TimeIsUp != null) TimeIsUp();
         }
-        if (timeLeft <= 20)
+        if (timeLeft == 20)
         {
+            AudioManager.instance.Play("StartQuake");
             Player.GetComponent<Player>().rockCreateMultiplier = 1.0f;
             cam.GetComponent<CameraFollow>().isCameraShaking = true;
         }
-        if (timeLeft <= 10)
+        if (timeLeft == 10)
         {
             animator.SetBool("isTimeRunningOut", true);
             Player.GetComponent<Player>().rockCreateMultiplier = 0.7f;

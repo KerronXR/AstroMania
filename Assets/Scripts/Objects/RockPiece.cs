@@ -39,6 +39,7 @@ public class RockPiece : MonoBehaviour
         GameObject ExplosionQ = Instantiate(Explosion, whereToPutExplosion, new Quaternion(0, 0, 0, 0));
         ExplosionQ.transform.localScale = new Vector2(rockScale, rockScale);
         ExplosionQ.GetComponent<Animator>().SetBool("isClicked", true);
+        AudioManager.instance.PlayBlast();
         for (int i = 0; i < pieces.Length; i++)
         {
             Vector2 whereToPut = new Vector2(transform.position.x + Random.value, transform.position.y + Random.value);

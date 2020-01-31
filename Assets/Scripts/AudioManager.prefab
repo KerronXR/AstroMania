@@ -1,0 +1,249 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7766902307958837623
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7766902307958837622}
+  - component: {fileID: 7154013253367437153}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7766902307958837622
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7766902307958837623}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7154013253367437153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7766902307958837623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c8f62b2e4cdd1144a122a79f1a5ca7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MusicMixer: {fileID: 4295050411743446876, guid: 367d4fe9849c9e446973329ab47a3261,
+    type: 2}
+  SoundMixer: {fileID: -2627034570391024386, guid: 367d4fe9849c9e446973329ab47a3261,
+    type: 2}
+  sounds:
+  - name: Boom1
+    clip: {fileID: 8300000, guid: fc96116dc3c141440aabb5605744fea2, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Boom2
+    clip: {fileID: 8300000, guid: c401d00c96b512e488d2e3bf5d111509, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Boom3
+    clip: {fileID: 8300000, guid: c2153dcd0edd22f40bdebf613271bae7, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Boom4
+    clip: {fileID: 8300000, guid: 8b3f676fe7b41044495a2964396b8ba3, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Boom5
+    clip: {fileID: 8300000, guid: f01c623f724825e44a923d1ae50256f2, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Boom6
+    clip: {fileID: 8300000, guid: fd706038486fee041947a774223dc22e, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Boom7
+    clip: {fileID: 8300000, guid: c1f8c36ebdb20024ea8a59ec457d582c, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Boom8
+    clip: {fileID: 8300000, guid: f0bba60dd1813bd40af826dbaa99b983, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Boom9
+    clip: {fileID: 8300000, guid: d4aee29185389894b9cc0d8873904a49, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Stonefall1
+    clip: {fileID: 8300000, guid: a7c15385b0421024895e5cc3e7debaa3, type: 3}
+    volume: 0.15
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Stonefall2
+    clip: {fileID: 8300000, guid: 03a91dd32b518c8498bc827fd74afd1a, type: 3}
+    volume: 0.15
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Stonefall3
+    clip: {fileID: 8300000, guid: 36ad7f0299b31c743851b01c7578e5ff, type: 3}
+    volume: 0.15
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Stonefall4
+    clip: {fileID: 8300000, guid: d86aea8886f5ada41b250d3d2fe6b279, type: 3}
+    volume: 0.15
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: AstroLand
+    clip: {fileID: 8300000, guid: 64baa1f44691afc42a584e482cd9a27d, type: 3}
+    volume: 0.6
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Jump
+    clip: {fileID: 8300000, guid: 22e582e423d1e7447bc1270621a89b71, type: 3}
+    volume: 0.1
+    pitch: 1.1
+    source: {fileID: 0}
+    loop: 0
+  - name: Slide
+    clip: {fileID: 8300000, guid: b8ef85913fa7d43ac81d6ffc464fc738, type: 3}
+    volume: 0.6
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Boost
+    clip: {fileID: 8300000, guid: 77ea6813eafb24218955eb3a26fe40fb, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: GetCore
+    clip: {fileID: 8300000, guid: 560b59f7bba57425da9d11fb4794b676, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: BoostReady
+    clip: {fileID: 8300000, guid: 7c42dc7b6ca7c455d81e87276ceb903b, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: LavaDrop
+    clip: {fileID: 8300000, guid: d870afe438f35bc4a98e82f82557c7a6, type: 3}
+    volume: 0.6
+    pitch: 1.74
+    source: {fileID: 0}
+    loop: 0
+  - name: StartQuake
+    clip: {fileID: 8300000, guid: 74c75508311a46c468faf0e1e0190ac6, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+  - name: StarBlast
+    clip: {fileID: 8300000, guid: 734fee47d1be6df4eabb2ec437fdc594, type: 3}
+    volume: 0.346
+    pitch: 1.6
+    source: {fileID: 0}
+    loop: 0
+  - name: Spaceship
+    clip: {fileID: 8300000, guid: 139982ee37a243d40aab3b2b96b2c253, type: 3}
+    volume: 0.578
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+  - name: MenuClick
+    clip: {fileID: 8300000, guid: 1219e8aa13fb04f538c35b8d080bbc0a, type: 3}
+    volume: 0.578
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: PlayClick
+    clip: {fileID: 8300000, guid: fd7aa363a188d47858202c3344e3fd2c, type: 3}
+    volume: 0.578
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: MenuAdjust
+    clip: {fileID: 8300000, guid: 930437b21a852410595bc9db5173b97c, type: 3}
+    volume: 0.578
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: MenuPause
+    clip: {fileID: 8300000, guid: 68378f764d6b3426fb75496eeb422abb, type: 3}
+    volume: 0.578
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: MenuResume
+    clip: {fileID: 8300000, guid: 19cb450886b924bb7bb0946c18df05f2, type: 3}
+    volume: 0.578
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  tracks:
+  - name: Track1
+    clip: {fileID: 8300000, guid: 2ca9dfc5c87541540b731dc34bfc7bda, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+  - name: Track2
+    clip: {fileID: 8300000, guid: 348f348f09d8232458ab90cba007ac47, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+  - name: Track3
+    clip: {fileID: 8300000, guid: 41fbd855e439de649b07f9df3d21714c, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+  - name: MainMenu
+    clip: {fileID: 8300000, guid: 97f5a65dda474424587cc414c6de95e3, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+  - name: Win
+    clip: {fileID: 8300000, guid: ea0df3c3884da4b47b409b6e1e30d3e9, type: 3}
+    volume: 0.2
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1

@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+    public delegate void DiedOnLavaAction();
+    public static event DiedOnLavaAction DiedOnLava;
+    public delegate void WinLevelAction();
+    public static event WinLevelAction WinLevel;
     public PlayerController controller;
     public Animator animator;
     public Rigidbody2D rb;
@@ -182,7 +186,7 @@ public class Player : MonoBehaviour
         */
         if (collision.collider.name == "Spaceship")
         {
-            SceneManager.LoadScene("Win");
+            if (WinLevel != null) WinLevel();
         }
         if (collision.collider.name.StartsWith("Rock") && (controller.isSliding || boost))
         {
@@ -223,6 +227,7 @@ public class Player : MonoBehaviour
     public void AddCore()
     {
         coreAmount++;
+        AudioManager.instance.Play("GetCore");
         if (aquiredCoreAmount < 9)
         {
             aquiredCoreAmount++;
@@ -231,6 +236,7 @@ public class Player : MonoBehaviour
         coreCounter.GetComponent<CoresCounter>().SetCoresAmount(coreAmount);
         if (aquiredCoreAmount == 9)
         {
+            AudioManager.instance.Play("BoostReady");
             boostButton.GetComponent<BoostButton>().animator.SetBool("isReady", true);
         }
 
@@ -243,6 +249,7 @@ public class Player : MonoBehaviour
         {
             rb.mass += 50;
             boost = true;
+            AudioManager.instance.Play("Boost");
             numOfBoosts++;
             runSpeed = defaultRunSpeed * 1.4f; // if speed is slowed - this release it
             currentRunSpeed = runSpeed;
@@ -251,7 +258,7 @@ public class Player : MonoBehaviour
             currentAnimationSpeed = 1.4f;
             aquiredCoreAmount = 0;
             boostButton.GetComponent<BoostButton>().SetBoostImage(0);
-            Invoke("BoostOff", 6f);
+            Invoke("BoostOff", 7f);
         }
     }
 
@@ -272,7 +279,7 @@ public class Player : MonoBehaviour
 
     public void StandsOnLava()
     {
-        if (lavaLevel < 520) lavaLevel++;
+        if (lavaLevel < 520) lavaLevel += 2;
         isStandingOnLava = true;
     }
 
@@ -285,7 +292,10 @@ public class Player : MonoBehaviour
     {
         if (isStandingOnLava)
         {
-            if (lavaLevel >= 520) SceneManager.LoadScene("GameOver1");
+            if (lavaLevel >= 520)
+            {
+                if (DiedOnLava != null) DiedOnLava();
+            }
             thermometer.GetComponent<Thermometer>().SetThermo(lavaLevel / 10);
         }
         else

@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
             canDoAction = true;
             PlayerLight.GetComponent<PlayerLight>().isJumping = false;
+            AudioManager.instance.Play("AstroLand");
             OnLandEvent.Invoke();
         }
     }
@@ -102,6 +103,7 @@ public class PlayerController : MonoBehaviour
             shouldCheckGround = false;  // give time to fly off the ground
             canDoAction = false;
             isJumping = true;
+            AudioManager.instance.Play("Jump");
             PlayerLight.GetComponent<PlayerLight>().isJumping = true;
             Player.GetComponent<Player>().animator.SetBool("isJumping", true);
             m_Rigidbody2D.mass += 50;
@@ -114,6 +116,7 @@ public class PlayerController : MonoBehaviour
         {
             canDoAction = false;
             isSliding = true;
+            AudioManager.instance.Play("Slide");
             PlayerLight.GetComponent<PlayerLight>().isSliding = true;
             Player.GetComponent<Player>().animator.SetBool("isSliding", true);
             m_Rigidbody2D.mass += 10;
