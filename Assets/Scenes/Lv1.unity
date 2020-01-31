@@ -5004,7 +5004,7 @@ MonoBehaviour:
   animator: {fileID: 1814990347}
   cam: {fileID: 291533812}
   Player: {fileID: 1039952559}
-  timeToFinish: 25
+  timeToFinish: 130
 --- !u!114 &1814990350
 MonoBehaviour:
   m_ObjectHideFlags: 0
