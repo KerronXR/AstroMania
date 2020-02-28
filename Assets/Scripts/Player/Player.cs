@@ -17,10 +17,12 @@ public class Player : MonoBehaviour
     public GameObject boostButton;
     public GameObject timer;
     public GameObject thermometer;
+    private GameObject ppFX;
+    private GameObject dieCanvas;
     public Collider2D bottomCollider;
     public Collider2D slideCollider;
     private int pickRock;
-    private bool isBusyCreatingPrefabRocks = false;
+    [HideInInspector] public bool isBusyCreatingPrefabRocks = false;
     private float horizontalMove = 0f;
     // private int healthPoints = 100;
     private int coreAmount = 0;
@@ -43,12 +45,16 @@ public class Player : MonoBehaviour
     public float rockCreateMultiplier = 1.5f; // the lower the more rocks per second
     private int lavaLevel = 0;
     private bool isStandingOnLava = false;
+    private bool alreadyDying = false;
+    private bool isPlayerDead = false;
 
 
-    private void Start()
+    private void Awake()
     {
         defaultRunSpeed = runSpeed;
         currentRunSpeed = runSpeed;
+        ppFX = GameObject.Find("PostProcessingFX");
+        dieCanvas = GameObject.Find("DiedOnLavaCanvas");
     }
 
     void Update()
@@ -117,6 +123,13 @@ public class Player : MonoBehaviour
             jump = true;
         }
 
+        checkTemperature();
+
+        if (alreadyDying)
+        {
+            jump = false;
+            slide = false;
+        }
         // horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
         horizontalMove = 1 * runSpeed;
         //horizontalMove = 17;
@@ -129,8 +142,6 @@ public class Player : MonoBehaviour
             isBusyCreatingPrefabRocks = true;
             Invoke("CreatePrefabRocks", (Random.value * rockCreateMultiplier));
         }
-
-        checkTemperature();
     }
 
     public void checkPos() // Update the animator speed
@@ -237,7 +248,7 @@ public class Player : MonoBehaviour
         if (aquiredCoreAmount == 9)
         {
             AudioManager.instance.Play("BoostReady");
-            boostButton.GetComponent<BoostButton>().animator.SetBool("isReady", true);
+            boostButton.GetComponent<BoostButton>().AnimateReady(true);
         }
 
 
@@ -247,6 +258,7 @@ public class Player : MonoBehaviour
     {
         if (aquiredCoreAmount == 9)
         {
+            ppFX.GetComponent<Animator>().SetBool("boostOn", true);
             rb.mass += 50;
             boost = true;
             AudioManager.instance.Play("Boost");
@@ -254,7 +266,7 @@ public class Player : MonoBehaviour
             runSpeed = defaultRunSpeed * 1.4f; // if speed is slowed - this release it
             currentRunSpeed = runSpeed;
             animator.SetFloat("SlowDownMultiplier", 1.4f);
-            boostButton.GetComponent<BoostButton>().animator.SetBool("isReady", false);
+            boostButton.GetComponent<BoostButton>().AnimateReady(false);
             currentAnimationSpeed = 1.4f;
             aquiredCoreAmount = 0;
             boostButton.GetComponent<BoostButton>().SetBoostImage(0);
@@ -273,13 +285,14 @@ public class Player : MonoBehaviour
             currentRunSpeed = runSpeed;
             animator.SetFloat("SlowDownMultiplier", defaultAnimationSpeed);
             currentAnimationSpeed = defaultAnimationSpeed;
+            ppFX.GetComponent<Animator>().SetBool("boostOn", false);
         }
 
     }
 
     public void StandsOnLava()
     {
-        if (lavaLevel < 520) lavaLevel += 2;
+        lavaLevel += 2;
         isStandingOnLava = true;
     }
 
@@ -292,18 +305,65 @@ public class Player : MonoBehaviour
     {
         if (isStandingOnLava)
         {
-            if (lavaLevel >= 520)
+            if (lavaLevel >= 550 && lavaLevel < 950)
             {
-                if (DiedOnLava != null) DiedOnLava();
+                if (!alreadyDying) // run only once when starting to die
+                {
+                    rb.velocity = new Vector2(0, 0);
+                    runSpeed = 0;
+                    if (DiedOnLava != null) DiedOnLava(); // register death on level
+                    alreadyDying = true;
+                    Collider2D[] playerColliders = new Collider2D[10];
+                    int contactCount = rb.GetContacts(playerColliders);
+                    for (int i = 0; i < contactCount; i++)   // destroy all the rocks around
+                    {
+                        if (playerColliders[i].name.Contains("Rock") || playerColliders[i].name.Contains("small"))
+                        {
+                            Destroy(playerColliders[i].gameObject);
+                        }
+                    }
+                    thermometer.GetComponent<Thermometer>().AnimateThermoBlow();                  
+                    dieCanvas.GetComponent<GameOverDieOnLava>().LoadGameOverDieOnLavaCanvas();
+                    ppFX.GetComponent<Animator>().SetBool("isWasted", true);
+                    rb.isKinematic = true;
+                }
+                DieOnLava();
             }
-            thermometer.GetComponent<Thermometer>().SetThermo(lavaLevel / 10);
+            if (lavaLevel < 548)
+            {
+                thermometer.GetComponent<Thermometer>().SetThermo(lavaLevel / 10);
+            }
+            if (lavaLevel >= 950)
+            {
+                if (!isPlayerDead)
+                {
+                    foreach (Collider2D c in GetComponents<Collider2D>())
+                    {
+                        c.enabled = false;
+                    }
+                    rb.gravityScale = 0;
+                    isPlayerDead = true;
+                }
+
+            }
+
         }
         else
         {
             if (lavaLevel > 0) lavaLevel--;
-            if (lavaLevel == 0) thermometer.GetComponent<Thermometer>().SetThermo(52);
-            else thermometer.GetComponent<Thermometer>().SetThermo(lavaLevel / 10);
+            if (lavaLevel == 0) thermometer.GetComponent<Thermometer>().SetThermo(0);
+            if (lavaLevel < 548 && lavaLevel > 0)
+            {
+                thermometer.GetComponent<Thermometer>().SetThermo(lavaLevel / 10);
+            }
         }
     }
 
+    private void DieOnLava()
+    {
+        if (Time.timeScale > 0.31f) Time.timeScale -= 0.01f;
+        Vector3 desiredPosition = new Vector3(transform.position.x, -7.8f, transform.position.z);
+        Vector3 smoothPosition = Vector3.Lerp(transform.position, desiredPosition, 2.25f * Time.deltaTime);
+        transform.position = smoothPosition;
+    }
 }

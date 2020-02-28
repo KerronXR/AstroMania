@@ -43,7 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1036c40f994c7dc458ead81e81185f07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentlevel: 
-  volume: 0
-  qualityIndex: 0
   audioMixer: {fileID: 24100000, guid: 367d4fe9849c9e446973329ab47a3261, type: 2}
+  Training: {fileID: 2578777116309506595, guid: 8ab6d59571defaf4896165469f74fd11,
+    type: 3}

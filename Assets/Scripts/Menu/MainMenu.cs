@@ -15,6 +15,7 @@ public class MainMenu : MonoBehaviour
     public GameObject soundAudioSlider;
     public GameObject musicAudioSlider;
     public GameObject dropDown;
+    public GameObject trainToggle;
     public AudioMixer audioMixer;
     private bool soundCooldown = true;
 
@@ -24,9 +25,16 @@ public class MainMenu : MonoBehaviour
         float SoundVolume = PlayerPrefs.GetFloat("SoundVolume");
         float MusicVolume = PlayerPrefs.GetFloat("MusicVolume");
         int qualityIndex = PlayerPrefs.GetInt("qualityIndex");
+        int runNumber = PlayerPrefs.GetInt("runNumber");
+        bool isTraining;
+        if (PlayerPrefs.GetInt("isTraining") == 1) isTraining = true;
+        else isTraining = false;
+        if (runNumber == 0) isTraining = true;
+        PlayerPrefs.SetInt("runNumber", (runNumber+1));
         soundAudioSlider.GetComponent<Slider>().value = SoundVolume;
         musicAudioSlider.GetComponent<Slider>().value = MusicVolume;
         dropDown.GetComponent<TMP_Dropdown>().value = qualityIndex;
+        trainToggle.GetComponent<Toggle>().isOn = isTraining;
         RemoveTestSoundCooldown();
     }
     public void GoPlayGame()
@@ -36,6 +44,8 @@ public class MainMenu : MonoBehaviour
 
     public void GoPlayLevel(string name)
     {
+        PlayerPrefs.SetInt("isTraining", 0);
+        GameManager.instance.isTraining = false;
         if (PlayLevel != null) PlayLevel(name);
     }
 
@@ -55,6 +65,12 @@ public class MainMenu : MonoBehaviour
         if (soundCooldown == false) PlayTestSound();
         audioMixer.SetFloat("SoundVolume", volume);
         PlayerPrefs.SetFloat("SoundVolume", volume);
+    }
+
+    public void SetTraining(bool value)
+    {
+        if (value) PlayerPrefs.SetInt("isTraining", 1);
+        else PlayerPrefs.SetInt("isTraining", 0);
     }
 
     void PlayTestSound()

@@ -14,18 +14,21 @@ public class EndGameCanvas : MonoBehaviour
     public void NextLevelButton()
     {
         AudioManager.instance.Play("MenuClick");
+        Time.timeScale = 1f;
         if (NextLevel != null) NextLevel();
     }
 
     public void MenuButton()
     {
         AudioManager.instance.Play("MenuClick");
+        Time.timeScale = 1f;
         if (MenuLoad != null) MenuLoad();
     }
 
     public void AgainButton()
     {
         AudioManager.instance.Play("MenuClick");
+        Time.timeScale = 1f;
         if (PlayAgain != null) PlayAgain();
     }
 }

@@ -7,6 +7,7 @@ public class RockWall : MonoBehaviour
 {
     public SpriteRenderer image;
     public GameObject Explosion;
+    public GameObject TapMe;
     public GameObject[] pieces;
     private float rockScale;
     public static bool queriesHitTriggers;
@@ -16,6 +17,10 @@ public class RockWall : MonoBehaviour
         queriesHitTriggers = false;
         rockScale = 0.7f + Random.value * 0.7f;
         transform.localScale = new Vector2(rockScale, rockScale);
+        if (GameManager.instance.isTraining == false)
+        {
+            Destroy(TapMe);
+        }
     }
     private void OnMouseDown()
     {
@@ -24,6 +29,7 @@ public class RockWall : MonoBehaviour
         ExplosionQ.transform.localScale = new Vector2(rockScale, rockScale);
         ExplosionQ.GetComponent<Animator>().SetBool("isClicked", true);
         AudioManager.instance.PlayBlast();
+        if (TapMe != null) Destroy(TapMe);
         for (int i = 0; i < pieces.Length; i++)
         {
             Vector2 whereToPut = new Vector2(transform.position.x + Random.value, transform.position.y + Random.value);

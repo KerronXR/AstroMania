@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     private float SoundVolume, MusicVolume;
     private int qualityIndex;
     public AudioMixer audioMixer;
+    public bool isTraining = false;
 
     private void Awake()
     {
@@ -84,13 +85,23 @@ public class GameManager : MonoBehaviour
         Scene currScene = SceneManager.GetActiveScene();
         lastPlayedSceneIndex = currScene.buildIndex;  // store the level played before the lose screen
         PlayerPrefs.SetInt("lastPlayedSceneIndex", lastPlayedSceneIndex);
-        String currSceneNumber = currScene.name.Substring(2, 1);
-        SceneManager.LoadScene("GameOver" + currSceneNumber);
-        AudioManager.instance.Play("StarBlast");
+        if (UnityEngine.StackTraceUtility.ExtractStackTrace().Contains("checkTemperature"))
+        {
+            // Die on lava is level feature
+            // So no load lose scene just register last played level
+            AudioManager.instance.Play("Wasted");
+        }
+        else
+        {
+            SceneManager.LoadScene("GameOver");
+            AudioManager.instance.Play("StarBlast");
+        }
     }
 
     void LoadWinScene()
     {
+        PlayerPrefs.SetInt("isTraining", 0);
+        isTraining = false;
         Scene currScene = SceneManager.GetActiveScene();
         lastPlayedSceneIndex = currScene.buildIndex;  // store the level played before the win screen
         PlayerPrefs.SetInt("lastPlayedSceneIndex", lastPlayedSceneIndex);
@@ -104,10 +115,19 @@ public class GameManager : MonoBehaviour
 
     void LoadSameScene()
     {
-        Invoke("StopAllSounds", 0.1f);
-        AudioManager.instance.StopTracks();
-        SceneManager.LoadScene("Lv" + lastPlayedSceneIndex);
-        AudioManager.instance.PlayTrack("Track" + lastPlayedSceneIndex);
+        if (PlayerPrefs.GetInt("isTraining") == 1)
+        {
+            isTraining = true;
+            LoadLevel("Lv1");
+        }
+        else
+        {
+            isTraining = false;
+            Invoke("StopAllSounds", 0.1f);
+            AudioManager.instance.StopTracks();
+            SceneManager.LoadScene("Lv" + lastPlayedSceneIndex);
+            AudioManager.instance.PlayTrack("Track" + lastPlayedSceneIndex);
+        }
     }
 
     void LoadMenuScene()

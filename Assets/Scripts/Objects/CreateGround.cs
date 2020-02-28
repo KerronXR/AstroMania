@@ -11,10 +11,14 @@ public class CreateGround : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i <= levelSize; i++)
+        /* First Ground 2nd Type */
+        Vector2 whereToPutGround = new Vector2(0, -7);
+        Instantiate(ground[2], whereToPutGround, new Quaternion(0, 0, 0, 0));
+        Instantiate(backGround, whereToPutGround, new Quaternion(0, 0, 0, 0));
+        for (int i = 1; i <= levelSize; i++)
         {
             randomRoll = (int)Mathf.Floor(Random.value * ground.Length);
-            Vector2 whereToPutGround = new Vector2(i * 20, -7);
+            whereToPutGround = new Vector2(i * 20, -7);
             Instantiate(ground[randomRoll], whereToPutGround, new Quaternion(0, 0, 0, 0));
             Instantiate(backGround, whereToPutGround, new Quaternion(0, 0, 0, 0));
         }
