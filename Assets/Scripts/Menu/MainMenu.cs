@@ -29,7 +29,11 @@ public class MainMenu : MonoBehaviour
         bool isTraining;
         if (PlayerPrefs.GetInt("isTraining") == 1) isTraining = true;
         else isTraining = false;
-        if (runNumber == 0) isTraining = true;
+        if (runNumber == 0)
+        {
+            PlayerPrefs.SetInt("isTraining", 1);
+            isTraining = true;
+        }
         PlayerPrefs.SetInt("runNumber", (runNumber+1));
         soundAudioSlider.GetComponent<Slider>().value = SoundVolume;
         musicAudioSlider.GetComponent<Slider>().value = MusicVolume;
