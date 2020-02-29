@@ -17,7 +17,7 @@ public class Training : MonoBehaviour
         Player = GameObject.Find("Player");
         runSpeed = Player.GetComponent<Player>().runSpeed;
         Player.GetComponent<Player>().runSpeed = 0;
-        Player.GetComponent<Player>().isBusyCreatingPrefabRocks = true;
+        Player.GetComponent<Player>().isTraining = true;
         UICanvas = GameObject.Find("UI Canvas");
         UICanvas.SetActive(false);
         Invoke("Release", 15f);
@@ -28,6 +28,8 @@ public class Training : MonoBehaviour
     {
         UICanvas.SetActive(true);
         Player.GetComponent<Player>().runSpeed = runSpeed;
+        Player.GetComponent<Player>().isTraining = false;
         CountDown.GetComponent<Timer>().timeToFinish = timeToFinish + 16;
+
     }
 }

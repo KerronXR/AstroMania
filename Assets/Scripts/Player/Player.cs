@@ -22,7 +22,8 @@ public class Player : MonoBehaviour
     public Collider2D bottomCollider;
     public Collider2D slideCollider;
     private int pickRock;
-    [HideInInspector] public bool isBusyCreatingPrefabRocks = false;
+    private bool isBusyCreatingPrefabRocks = false;
+    public bool isTraining = false;
     private float horizontalMove = 0f;
     // private int healthPoints = 100;
     private int coreAmount = 0;
@@ -137,7 +138,7 @@ public class Player : MonoBehaviour
         jump = false;
         slide = false;
 
-        if (!isBusyCreatingPrefabRocks) // only execute within 0-2 seconds random 
+        if (!isBusyCreatingPrefabRocks && !isTraining) // only execute within 0-2 seconds random 
         {
             isBusyCreatingPrefabRocks = true;
             Invoke("CreatePrefabRocks", (Random.value * rockCreateMultiplier));
